@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vs.business.bean.LabelCategory">
+
+    <select id="count" resultType="int">
+        select count(*) from LabelCategory
+        <where>
+            <if test="category != null">
+                category = #{category}
+            </if>
+            <if test="name != null">
+                Name = #{name}
+            </if>
+            <if test="nameCode != null">
+                NameCode = #{nameCode}
+            </if>
+            <if test="orderNumber != null">
+                OrderNumber = #{orderNumber}
+            </if>
+            <if test="projectCode != null">
+                projectCode = #{projectCode}
+            </if>
+            <if test="type2 != null">
+                Type2 = #{type2}
+            </if>
+            <if test="type2Code != null">
+                Type2Code = #{type2Code}
+            </if>
+            <if test="typeCode != null">
+                TypeCode = #{typeCode}
+            </if>
+            <if test="uuid != null">
+                LC_ID = #{uuid}
+            </if>
+            <if test="isPublish != null">
+                isPublish = #{isPublish}
+            </if>
+        </where>
+    </select>
+
+    <select id="pkSelectByMap" resultType="int">
+        SELECT
+        LC_ID
+        FROM
+        LabelCategory
+        <where>
+            <if test="category != null">
+                and category = #{category}
+            </if>
+            <if test="name != null">
+                and Name = #{name}
+            </if>
+            <if test="nameCode != null">
+                and NameCode = #{nameCode}
+            </if>
+            <if test="orderNumber != null">
+                and OrderNumber = #{orderNumber}
+            </if>
+            <if test="projectCode != null">
+                and projectCode = #{projectCode}
+            </if>
+            <if test="type2 != null">
+                and Type2 = #{type2}
+            </if>
+            <if test="type2Code != null">
+                and Type2Code = #{type2Code}
+            </if>
+            <if test="typeCode != null">
+                and TypeCode = #{typeCode}
+            </if>
+            <if test="uuid != null">
+                and LC_ID = #{uuid}
+            </if>
+        </where>
+        <if test="orderBy != null">
+            order by #{orderBy}
+        </if>
+        <if test="limit != null">
+            limit #{start},#{end}
+        </if>
+    </select>
+
+</mapper>

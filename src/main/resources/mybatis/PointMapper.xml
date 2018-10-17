@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- The SQL in these maps files has purposely been typed with more verbosity than is actually required.
+ For example, many of the selects could have just used SELECT * FROM... instead of listing all of the columns.
+This is to demonstrate that even complex SQL can be handled and coded and formatted the way SQL was meant
+ to be (i.e. not a bunch of concatenated strings in a Java class). -->
+
+<mapper namespace="com.vs.business.bean.Point">
+
+	<resultMap id="pointResult" type="com.vs.business.bean.Point">
+		<result property="createId" column="create_id"/><!-- int -->
+		<result property="createTime" column="create_time"/><!-- String -->
+		<result property="point" column="point"/><!-- int -->
+		<result property="status" column="status"/><!-- int -->
+		<result property="type" column="type"/><!-- int -->
+		<result property="updateId" column="update_id"/><!-- int -->
+		<result property="updateTime" column="update_time"/><!-- String -->
+		<result property="uuid" column="id"/><!-- int -->
+	</resultMap>
+
+	<select id="selectById" resultMap="pointResult">
+		select * from tb_point
+		<where>
+			<if test = "_parameter != null">
+				id = #{value}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByMap" resultMap="pointResult">
+		select * from tb_point
+		<where>
+			<if test = "createId != null">
+				and create_id = #{createId}
+			</if>
+			<if test = "createTime != null">
+				and create_time = #{createTime}
+			</if>
+			<if test = "point != null">
+				and point = #{point}
+			</if>
+			<if test = "status != null">
+				and status = #{status}
+			</if>
+			<if test = "type != null">
+				and type = #{type}
+			</if>
+			<if test = "updateId != null">
+				and update_id = #{updateId}
+			</if>
+			<if test = "updateTime != null">
+				and update_time = #{updateTime}
+			</if>
+			<if test = "uuid != null">
+				and uuid = #{uuid}
+			</if>
+		</where>
+		<if test = "orderBy != null">
+			order by #{orderBy}
+		</if>
+		<if test = "limit != null">
+			limit #{start}, #{end}
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="com.vs.business.bean.Point" useGeneratedKeys="true" keyProperty="uuid">
+		insert into tb_point
+		(
+		create_id,
+		create_time,
+		point,
+		status,
+		type,
+		update_id,
+		update_time,
+		id
+		)
+		values
+		(
+		#{createId},
+		#{createTime},
+		#{point},
+		#{status},
+		#{type},
+		#{updateId},
+		#{updateTime},
+		#{uuid}
+		)
+	</insert>
+
+	<select id="count" resultType="int">
+		select count(*) from tb_point
+		<where>
+			<if test = "createId != null">
+				and create_id = #{createId}
+			</if>
+			<if test = "createTime != null">
+				and create_time = #{createTime}
+			</if>
+			<if test = "point != null">
+				and point = #{point}
+			</if>
+			<if test = "status != null">
+				and status = #{status}
+			</if>
+			<if test = "type != null">
+				and type = #{type}
+			</if>
+			<if test = "updateId != null">
+				and update_id = #{updateId}
+			</if>
+			<if test = "updateTime != null">
+				and update_time = #{updateTime}
+			</if>
+			<if test = "uuid != null">
+				and id = #{uuid}
+			</if>
+		</where>
+	</select>
+
+	<select id="countPoint" resultType="int">
+		select ifnull(sum(point), 0) as point
+		from tb_point
+		where create_id = #{createId}
+			and status = #{status}
+			and type = #{type}
+			and create_time like concat(#{createTime}, '%')
+	</select>
+
+	<update id="update" parameterType="com.vs.business.bean.Point">
+		update tb_point
+		set
+		create_id = #{createId},
+		create_time = #{createTime},
+		point = #{point},
+		status = #{status},
+		type = #{type},
+		update_id = #{updateId},
+		update_time = #{updateTime}
+		where
+		id = #{uuid};
+	</update>
+
+	<update id="updateByMap">
+		update tb_point
+		<set>
+			<if test ="createId != null">
+				create_id = #{createId},
+			</if>
+			<if test ="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test ="point != null">
+				point = #{point},
+			</if>
+			<if test ="status != null">
+				status = #{status},
+			</if>
+			<if test ="type != null">
+				type = #{type},
+			</if>
+			<if test ="updateId != null">
+				update_id = #{updateId},
+			</if>
+			<if test ="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+</mapper>

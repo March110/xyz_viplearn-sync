@@ -1,0 +1,42 @@
+spring:
+  profiles.active: local
+
+---
+spring:
+  profiles: local
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://rm-2zekqtl54hnkm450go.mysql.rds.aliyuncs.com:3306/fp_db_q?useUnicode=true&autoReconnect=true&autoReconnectForPools=true&characterEncoding=UTF-8
+    username: writer
+    password: 030fbcc$AX-
+  data:
+    mongodb:
+      host: 39.106.208.80
+      port: 27017
+      database: viplearn
+      username: vip
+      password: viplearn
+
+mybatis:
+  type-aliases-package: com.vs.business.bean
+  mapper-locations: classpath:mybatis/*.xml
+
+---
+spring:
+  profiles: dev
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://rm-2zekqtl54hnkm450go.mysql.rds.aliyuncs.com:3306/fp_db_q?useUnicode=true&autoReconnect=true&autoReconnectForPools=true&characterEncoding=UTF-8
+    username: writer
+    password: 030fbcc$AX-
+  data:
+    mongodb:
+      host: 39.106.208.80
+      port: 27017
+      database: viplearn
+      username: vip
+      password: viplearn
+
+mybatis:
+  type-aliases-package: com.vs.business.bean
+  mapper-locations: classpath:mybatis/*.xml

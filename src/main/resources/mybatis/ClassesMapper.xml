@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- The SQL in these maps files has purposely been typed with more verbosity than is actually required.
+ For example, many of the selects could have just used SELECT * FROM... instead of listing all of the columns.
+This is to demonstrate that even complex SQL can be handled and coded and formatted the way SQL was meant
+ to be (i.e. not a bunch of concatenated strings in a Java class). -->
+
+<mapper namespace="com.vs.business.bean.Classes">
+
+  <resultMap id="classesResult" type="com.vs.business.bean.Classes">
+		<result property="businessType" column="business_type"/><!-- Integer -->
+		<result property="classType" column="class_type"/><!-- Integer -->
+		<result property="createId" column="create_id"/><!-- int -->
+		<result property="createTime" column="create_time"/><!-- String -->
+		<result property="description" column="description"/><!-- String -->
+		<result property="discount" column="discount"/><!-- Integer -->
+		<result property="endTime" column="end_time"/><!-- Date -->
+		<result property="isHot" column="is_hot"/><!-- Boolean -->
+		<result property="limitCount" column="limit_count"/><!-- Integer -->
+		<result property="name" column="name"/><!-- String -->
+		<result property="price" column="price"/><!-- Integer -->
+		<result property="signCount" column="sign_count"/><!-- Integer -->
+		<result property="startTime" column="start_time"/><!-- Date -->
+		<result property="status" column="status"/><!-- Integer -->
+		<result property="subjectId" column="subject_id"/><!-- Integer -->
+		<result property="subjectName" column="subject_name"/><!-- String -->
+		<result property="teacherWechatAccount" column="teacher_wechat_account"/><!-- String -->
+		<result property="updateId" column="update_id"/><!-- int -->
+		<result property="updateTime" column="update_time"/><!-- String -->
+		<result property="uuid" column="id"/><!-- Integer -->
+		<result property="examType" column="exam_type"/><!-- Integer -->
+		<result property="intensity" column="intensity"/><!-- Integer -->
+		<result property="plan" column="plan"/><!-- String -->
+		<result property="pain" column="pain"/><!-- String -->
+		<result property="suitable" column="suitable"/><!-- String -->
+  </resultMap>
+
+  <select id="selectById" resultMap="classesResult">
+    select * from tb_classes
+		<where>
+			<if test="_parameter != null">
+				id = #{value}
+			</if>
+		</where>
+  </select>
+
+  <select id="selectByMap" resultMap="classesResult">
+    select * from tb_classes
+		<where>
+			<if test="businessType != null">
+				and business_type = #{businessType}
+			</if>
+			<if test="classType != null">
+				and class_type = #{classType}
+			</if>
+			<if test="createId != null">
+				and create_id = #{createId}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime}
+			</if>
+			<if test="description != null">
+				and description = #{description}
+			</if>
+			<if test="discount != null">
+				and discount = #{discount}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime}
+			</if>
+			<if test="examType != null">
+				and exam_type = #{examType}
+			</if>
+			<if test="isHot != null">
+				and is_hot = #{isHot}
+			</if>
+			<if test="intensity != null">
+				and intensity = #{intensity}
+			</if>
+			<if test="limitCount != null">
+				and limit_count = #{limitCount}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+			<if test="pain != null">
+				and pain = #{pain}
+			</if>
+			<if test="plan != null">
+				and plan = #{plan}
+			</if>
+			<if test="price != null">
+				and price = #{price}
+			</if>
+			<if test="registInfo != null">
+				and regist_info = #{registInfo}
+			</if>
+			<if test="signCount != null">
+				and sign_count = #{signCount}
+			</if>
+			<if test="startTime != null">
+				and start_time = #{startTime}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+			<if test="subjectId != null">
+				and subject_id = #{subjectId}
+			</if>
+			<if test="subjectName != null">
+				and subject_name = #{subjectName}
+			</if>
+			<if test="suitable != null">
+				and suitable = #{suitable}
+			</if>
+			<if test="teacherWechatAccount != null">
+				and teacher_wechat_account = #{teacherWechatAccount}
+			</if>
+			<if test="updateId != null">
+				and update_id = #{updateId}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime}
+			</if>
+			<if test="uuid != null">
+				and id = #{uuid}
+			</if>
+		</where>
+		<if test="orderBy != null">
+			order by ${orderBy}
+		</if>
+		<if test="limit != null">
+			limit ${start}, ${end}
+		</if>
+  </select>
+
+  <insert id="insert" parameterType="com.vs.business.bean.Classes" useGeneratedKeys="true" keyProperty="uuid">
+       insert into tb_classes
+				(
+				business_type,
+				class_type,
+				create_id,
+				create_time,
+				description,
+				discount,
+				end_time,
+				exam_type,
+				is_hot,
+				intensity,
+				limit_count,
+				name,
+				pain,
+				plan,
+				price,
+				regist_info,
+				sign_count,
+				start_time,
+				status,
+				subject_id,
+				subject_name,
+				suitable,
+				teacher_wechat_account,
+				update_id,
+				update_time,
+				id
+				)
+				values
+				(
+				#{businessType},
+				#{classType},
+				#{createId},
+				#{createTime},
+				#{description},
+				#{discount},
+				#{endTime},
+				#{examType},
+				#{isHot},
+				#{intensity},
+				#{limitCount},
+				#{name},
+				#{pain},
+				#{plan},
+				#{price},
+				#{registInfo},
+				#{signCount},
+				#{startTime},
+				#{status},
+				#{subjectId},
+				#{subjectName},
+				#{suitable},
+				#{teacherWechatAccount},
+				#{updateId},
+				#{updateTime},
+				#{uuid}
+				)
+  </insert>
+
+  <select id="count" resultType="int">
+  		select count(*) from tb_classes
+			<where>
+			<if test="businessType != null">
+				and business_type = #{businessType}
+			</if>
+			<if test="classType != null">
+				and class_type = #{classType}
+			</if>
+			<if test="createId != null">
+				and create_id = #{createId}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime}
+			</if>
+			<if test="description != null">
+				and description = #{description}
+			</if>
+			<if test="discount != null">
+				and discount = #{discount}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime}
+			</if>
+			<if test="examType != null">
+				and exam_type = #{examType}
+			</if>
+			<if test="isHot != null">
+				and is_hot = #{isHot}
+			</if>
+			<if test="intensity != null">
+				and intensity = #{intensity}
+			</if>
+			<if test="limitCount != null">
+				and limit_count = #{limitCount}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+			<if test="pain != null">
+				and pain = #{pain}
+			</if>
+			<if test="plan != null">
+				and plan = #{plan}
+			</if>
+			<if test="price != null">
+				and price = #{price}
+			</if>
+			<if test="registInfo != null">
+				and regist_info = #{registInfo}
+			</if>
+			<if test="signCount != null">
+				and sign_count = #{signCount}
+			</if>
+			<if test="startTime != null">
+				and start_time = #{startTime}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+			<if test="subjectId != null">
+				and subject_id = #{subjectId}
+			</if>
+			<if test="subjectName != null">
+				and subject_name = #{subjectName}
+			</if>
+			<if test="suitable != null">
+				and suitable = #{suitable}
+			</if>
+			<if test="teacherWechatAccount != null">
+				and teacher_wechat_account = #{teacherWechatAccount}
+			</if>
+			<if test="updateId != null">
+				and update_id = #{updateId}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime}
+			</if>
+			<if test="uuid != null">
+				and id = #{uuid}
+			</if>
+			</where>
+  </select>
+
+  <update id="update" parameterType="com.vs.business.bean.Classes">
+	update tb_classes
+	set
+	business_type = #{businessType},
+	class_type = #{classType},
+	create_id = #{createId},
+	create_time = #{createTime},
+	description = #{description},
+	discount = #{discount},
+	end_time = #{endTime},
+	exam_type = #{examType},
+	is_hot = #{isHot},
+	intensity = #{intensity},
+	limit_count = #{limitCount},
+	name = #{name},
+	pain = #{pain},
+	plan = #{plan},
+	price = #{price},
+	sign_count = #{signCount},
+	start_time = #{startTime},
+	status = #{status},
+	subject_id = #{subjectId},
+	subject_name = #{subjectName},
+	suitable = #{suitable},
+	teacher_wechat_account = #{teacherWechatAccount},
+	update_id = #{updateId},
+	update_time = #{updateTime}
+	where
+	id = #{uuid};
+  </update>
+
+  <update id="updateByMap">
+    update tb_classes
+    	<set>
+			<if test="businessType != null">
+				business_type = #{businessType},
+			</if>
+			<if test="classType != null">
+				class_type = #{classType},
+			</if>
+			<if test="createId != null">
+				create_id = #{createId},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="discount != null">
+				discount = #{discount},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime},
+			</if>
+			<if test="examType != null">
+				exam_type = #{examType},
+			</if>
+			<if test="isHot != null">
+				is_hot = #{isHot},
+			</if>
+			<if test="intensity != null">
+				intensity = #{intensity},
+			</if>
+			<if test="limitCount != null">
+				limit_count = #{limitCount},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="pain != null">
+				pain = #{pain},
+			</if>
+			<if test="plan != null">
+				plan = #{plan},
+			</if>
+			<if test="price != null">
+				price = #{price},
+			</if>
+			<if test="registInfo != null">
+				regist_info = #{registInfo},
+			</if>
+			<if test="signCount != null">
+				sign_count = #{signCount},
+			</if>
+			<if test="startTime != null">
+				start_time = #{startTime},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="subjectId != null">
+				subject_id = #{subjectId},
+			</if>
+			<if test="subjectName != null">
+				subject_name = #{subjectName},
+			</if>
+			<if test="suitable != null">
+				suitable = #{suitable},
+			</if>
+			<if test="teacherWechatAccount != null">
+				teacher_wechat_account = #{teacherWechatAccount},
+			</if>
+			<if test="updateId != null">
+				update_id = #{updateId},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+    	</set>
+    	where id = #{id}
+  </update>
+</mapper>
+

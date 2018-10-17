@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vs.business.bean.Exam">
+
+  <select id="getSyncUser" resultType="java.util.HashMap" >
+    select
+      create_user as createId
+    from exam_new_answer
+    where create_user > 0
+      and is_right = 1
+      and create_time between #{createTimeStart} and #{createTimeEnd}
+    group by create_user
+  </select>
+
+  <select id="getSyncExamAnswer" resultType="java.util.HashMap">
+    select
+      q.QCategory, count(1) as count
+    from exam_new_answer ena,
+    questions q
+    where ena.q_id = q.Q_ID
+      and ena.create_user = #{createId}
+      and ena.is_right = 1
+      and ena.create_time between #{createTimeStart} and #{createTimeEnd}
+    group by q.QCategory
+  </select>
+
+  <update id="syncAnswer">
+    REPLACE INTO user_rank_answer(user_id, timeType, client_type, scoreCount, titleCount, q_category, project_code, type)
+    SELECT
+    T1.create_user,
+    T2.timeType AS timeType,
+    IFNULL(T1.clientType,0) AS clientType,
+    SUM(CASE WHEN T1.timeType = T2.timeType THEN T1.scoreCount ELSE 0 END) AS scoreCount,
+    SUM(CASE WHEN T1.timeType = T2.timeType THEN T1.titleCount ELSE 0 END) AS titleCount,
+    T1.QCategory,
+    T1.projectCode,
+    T1.type
+    FROM
+    (
+    SELECT
+    ena.create_user,
+    CASE
+    WHEN TO_DAYS(ena.create_time) = TO_DAYS(NOW()) THEN 10
+    WHEN TO_DAYS(NOW()) - TO_DAYS(ena.create_time) = 1 THEN 15
+    WHEN YEARWEEK(DATE_FORMAT(ena.create_time,'%Y-%m-%d')) = YEARWEEK(NOW())-1 THEN 20
+    ELSE 0 END
+    AS timeType,
+    ena.clientType AS clientType,
+    SUM(CASE
+    WHEN ena.is_right = 1 AND q.QCategory = 112 THEN 10
+    WHEN ena.is_right = 1 AND q.QCategory = 113 THEN 10
+    WHEN ena.is_right = 1 AND q.QCategory = 114 THEN 30
+    WHEN ena.is_right = 1 AND q.QCategory = 115 THEN 30
+    ELSE 0 END
+    ) AS scoreCount,
+    COUNT(1) AS titleCount,
+    IFNULL(q.QCategory, -1) AS QCategory,
+    IFNULL(q.projectCode, '') AS projectCode,
+    eni.type
+    FROM exam_new_answer ena
+    INNER JOIN exam_new_info eni ON ena.exam_id = eni.id
+    INNER JOIN questions q ON ena.q_id = q.Q_ID AND q.IsDelete = 0
+    WHERE ena.create_user > 0
+    AND (ena.is_pass_answer = 0 OR ena.is_pass_answer IS NULL)
+    GROUP BY ena.create_user, timeType, q.QCategory, q.projectCode, eni.type, ena.clientType
+    ) T1,
+    (
+    <!-- 时间类型 0：其它 10：今天 15：昨天 20：上周  -->
+    SELECT 0 AS timeType UNION SELECT 10 UNION SELECT 15 UNION SELECT 20
+    ) T2
+    GROUP BY create_user, timeType, QCategory, projectCode, type, clientType
+  </update>
+</mapper>

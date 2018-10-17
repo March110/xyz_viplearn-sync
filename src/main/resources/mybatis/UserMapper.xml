@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- The SQL in these maps files has purposely been typed with more verbosity than is actually required.
+ For example, many of the selects could have just used SELECT * FROM... instead of listing all of the columns.
+This is to demonstrate that even complex SQL can be handled and coded and formatted the way SQL was meant
+ to be (i.e. not a bunch of concatenated strings in a Java class). -->
+
+<mapper namespace="com.vs.business.bean.User">
+
+	<resultMap id="userResult" type="com.vs.business.bean.User">
+		<result property="address" column="address"/><!-- String -->
+		<result property="age" column="age"/><!-- int -->
+		<result property="city" column="city"/><!-- String -->
+		<result property="createId" column="create_id"/><!-- int -->
+		<result property="createTime" column="create_time"/><!-- String -->
+		<result property="email" column="email"/><!-- String -->
+		<result property="intro" column="intro"/><!-- String -->
+		<result property="isLevel" column="is_level"/><!-- int -->
+		<result property="isOnline" column="is_online"/><!-- int -->
+		<result property="isOnlineExam" column="is_online_exam"/><!-- int -->
+		<result property="isQQ" column="is_qq"/><!-- int -->
+		<result property="isValEmail" column="is_val_email"/><!-- int -->
+		<result property="isValPhone" column="is_val_phone"/><!-- int -->
+		<result property="isWB" column="is_wb"/><!-- int -->
+		<result property="isWX" column="is_wx"/><!-- int -->
+		<result property="level" column="level"/><!-- int -->
+		<result property="memo" column="memo"/><!-- String -->
+		<result property="name" column="name"/><!-- String -->
+		<result property="password" column="password"/><!-- String -->
+		<result property="phoneNo" column="phone_no"/><!-- String -->
+		<result property="photo" column="photo"/><!-- String -->
+		<result property="point" column="point"/><!-- int -->
+		<result property="province" column="province"/><!-- String -->
+		<result property="sex" column="sex"/><!-- int -->
+		<result property="stage" column="stage"/><!-- int -->
+		<result property="status" column="status"/><!-- int -->
+		<result property="stuNo" column="stu_no"/><!-- String -->
+		<result property="updateId" column="update_id"/><!-- int -->
+		<result property="updateTime" column="update_time"/><!-- String -->
+		<result property="uuid" column="UID"/><!-- int -->
+	</resultMap>
+
+	<select id="selectById" resultMap="userResult">
+		select * from userinfo
+		<where>
+			<if test = "_parameter != null">
+				UID = #{value}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByMap" resultMap="userResult">
+		select * from userinfo
+		<where>
+			<if test = "address != null">
+				and address = #{address}
+			</if>
+			<if test = "age != null">
+				and age = #{age}
+			</if>
+			<if test = "city != null">
+				and city = #{city}
+			</if>
+			<if test = "createId != null">
+				and create_id = #{createId}
+			</if>
+			<if test = "createTime != null">
+				and create_time = #{createTime}
+			</if>
+			<if test = "email != null">
+				and email = #{email}
+			</if>
+			<if test = "intro != null">
+				and intro = #{intro}
+			</if>
+			<if test = "isLevel != null">
+				and is_level = #{isLevel}
+			</if>
+			<if test = "isOnline != null">
+				and is_online = #{isOnline}
+			</if>
+			<if test = "isOnlineExam != null">
+				and is_online_exam = #{isOnlineExam}
+			</if>
+			<if test = "isQQ != null">
+				and is_qq = #{isQQ}
+			</if>
+			<if test = "isValEmail != null">
+				and is_val_email = #{isValEmail}
+			</if>
+			<if test = "isValPhone != null">
+				and is_val_phone = #{isValPhone}
+			</if>
+			<if test = "isWB != null">
+				and is_wb = #{isWB}
+			</if>
+			<if test = "isWX != null">
+				and is_wx = #{isWX}
+			</if>
+			<if test = "level != null">
+				and level = #{level}
+			</if>
+			<if test = "memo != null">
+				and memo = #{memo}
+			</if>
+			<if test = "name != null">
+				and name = #{name}
+			</if>
+			<if test = "password != null">
+				and password = #{password}
+			</if>
+			<if test = "phoneNo != null">
+				and phone_no = #{phoneNo}
+			</if>
+			<if test = "photo != null">
+				and photo = #{photo}
+			</if>
+			<if test = "point != null">
+				and point = #{point}
+			</if>
+			<if test = "province != null">
+				and province = #{province}
+			</if>
+			<if test = "sex != null">
+				and sex = #{sex}
+			</if>
+			<if test = "stage != null">
+				and stage = #{stage}
+			</if>
+			<if test = "status != null">
+				and status = #{status}
+			</if>
+			<if test = "stuNo != null">
+				and stu_no = #{stuNo}
+			</if>
+			<if test = "updateId != null">
+				and update_id = #{updateId}
+			</if>
+			<if test = "updateTime != null">
+				and update_time = #{updateTime}
+			</if>
+			<if test = "uuid != null">
+				and id = #{uuid}
+			</if>
+		</where>
+		<if test = "orderBy != null">
+			order by #{orderBy}
+		</if>
+		<if test = "limit != null">
+			limit #{start}, #{end}
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="com.vs.business.bean.User" useGeneratedKeys="true" keyProperty="uuid">
+		insert into userinfo
+		(
+		address,
+		age,
+		city,
+		create_id,
+		create_time,
+		email,
+		intro,
+		is_level,
+		is_online,
+		is_online_exam,
+		is_qq,
+		is_val_email,
+		is_val_phone,
+		is_wb,
+		is_wx,
+		level,
+		memo,
+		name,
+		password,
+		phone_no,
+		photo,
+		point,
+		province,
+		sex,
+		stage,
+		status,
+		stu_no,
+		update_id,
+		update_time,
+		UID
+		)
+		values
+		(
+		#{address},
+		#{age},
+		#{city},
+		#{createId},
+		#{createTime},
+		#{email},
+		#{intro},
+		#{isLevel},
+		#{isOnline},
+		#{isOnlineExam},
+		#{isQQ},
+		#{isValEmail},
+		#{isValPhone},
+		#{isWB},
+		#{isWX},
+		#{level},
+		#{memo},
+		#{name},
+		#{password},
+		#{phoneNo},
+		#{photo},
+		#{point},
+		#{province},
+		#{sex},
+		#{stage},
+		#{status},
+		#{stuNo},
+		#{updateId},
+		#{updateTime},
+		#{uuid}
+		)
+	</insert>
+
+	<select id="count" resultType="int">
+		select count(*) from userinfo
+		<where>
+			<if test = "address != null">
+				and address = #{address}
+			</if>
+			<if test = "age != null">
+				and age = #{age}
+			</if>
+			<if test = "city != null">
+				and city = #{city}
+			</if>
+			<if test = "createId != null">
+				and create_id = #{createId}
+			</if>
+			<if test = "createTime != null">
+				and create_time = #{createTime}
+			</if>
+			<if test = "email != null">
+				and email = #{email}
+			</if>
+			<if test = "intro != null">
+				and intro = #{intro}
+			</if>
+			<if test = "isLevel != null">
+				and is_level = #{isLevel}
+			</if>
+			<if test = "isOnline != null">
+				and is_online = #{isOnline}
+			</if>
+			<if test = "isOnlineExam != null">
+				and is_online_exam = #{isOnlineExam}
+			</if>
+			<if test = "isQQ != null">
+				and is_qq = #{isQQ}
+			</if>
+			<if test = "isValEmail != null">
+				and is_val_email = #{isValEmail}
+			</if>
+			<if test = "isValPhone != null">
+				and is_val_phone = #{isValPhone}
+			</if>
+			<if test = "isWB != null">
+				and is_wb = #{isWB}
+			</if>
+			<if test = "isWX != null">
+				and is_wx = #{isWX}
+			</if>
+			<if test = "level != null">
+				and level = #{level}
+			</if>
+			<if test = "memo != null">
+				and memo = #{memo}
+			</if>
+			<if test = "name != null">
+				and name = #{name}
+			</if>
+			<if test = "password != null">
+				and password = #{password}
+			</if>
+			<if test = "phoneNo != null">
+				and phone_no = #{phoneNo}
+			</if>
+			<if test = "photo != null">
+				and photo = #{photo}
+			</if>
+			<if test = "point != null">
+				and point = #{point}
+			</if>
+			<if test = "province != null">
+				and province = #{province}
+			</if>
+			<if test = "sex != null">
+				and sex = #{sex}
+			</if>
+			<if test = "stage != null">
+				and stage = #{stage}
+			</if>
+			<if test = "status != null">
+				and status = #{status}
+			</if>
+			<if test = "stuNo != null">
+				and stu_no = #{stuNo}
+			</if>
+			<if test = "updateId != null">
+				and update_id = #{updateId}
+			</if>
+			<if test = "updateTime != null">
+				and update_time = #{updateTime}
+			</if>
+			<if test = "uuid != null">
+				and UID = #{uuid}
+			</if>
+		</where>
+	</select>
+
+	<update id="update" parameterType="com.vs.business.bean.User">
+	update userinfo
+	set
+	address = #{address},
+	age = #{age},
+	city = #{city},
+	create_id = #{createId},
+	create_time = #{createTime},
+	email = #{email},
+	intro = #{intro},
+	is_level = #{isLevel},
+	is_online = #{isOnline},
+	is_online_exam = #{isOnlineExam},
+	is_qq = #{isQQ},
+	is_val_email = #{isValEmail},
+	is_val_phone = #{isValPhone},
+	is_wb = #{isWB},
+	is_wx = #{isWX},
+	level = #{level},
+	memo = #{memo},
+	name = #{name},
+	password = #{password},
+	phone_no = #{phoneNo},
+	photo = #{photo},
+	point = #{point},
+	province = #{province},
+	sex = #{sex},
+	stage = #{stage},
+	status = #{status},
+	stu_no = #{stuNo},
+	update_id = #{updateId},
+	update_time = #{updateTime},
+	where
+	UID = #{uuid};
+  </update>
+
+	<update id="updateByMap">
+		update userinfo
+		<set>
+			<if test ="address != null">
+				address = #{address},
+			</if>
+			<if test ="age != null">
+				age = #{age},
+			</if>
+			<if test ="city != null">
+				city = #{city},
+			</if>
+			<if test ="createId != null">
+				create_id = #{createId},
+			</if>
+			<if test ="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test ="email != null">
+				email = #{email},
+			</if>
+			<if test ="intro != null">
+				intro = #{intro},
+			</if>
+			<if test ="isLevel != null">
+				is_level = #{isLevel},
+			</if>
+			<if test ="isOnline != null">
+				is_online = #{isOnline},
+			</if>
+			<if test ="isOnlineExam != null">
+				is_online_exam = #{isOnlineExam},
+			</if>
+			<if test ="isQQ != null">
+				is_qq = #{isQQ},
+			</if>
+			<if test ="isValEmail != null">
+				is_val_email = #{isValEmail},
+			</if>
+			<if test ="isValPhone != null">
+				is_val_phone = #{isValPhone},
+			</if>
+			<if test ="isWB != null">
+				is_wb = #{isWB},
+			</if>
+			<if test ="isWX != null">
+				is_wx = #{isWX},
+			</if>
+			<if test ="level != null">
+				level = #{level},
+			</if>
+			<if test ="memo != null">
+				memo = #{memo},
+			</if>
+			<if test ="name != null">
+				name = #{name},
+			</if>
+			<if test ="password != null">
+				password = #{password},
+			</if>
+			<if test ="phoneNo != null">
+				phone_no = #{phoneNo},
+			</if>
+			<if test ="photo != null">
+				photo = #{photo},
+			</if>
+			<if test ="point != null">
+				point = #{point},
+			</if>
+			<if test ="province != null">
+				province = #{province},
+			</if>
+			<if test ="sex != null">
+				sex = #{sex},
+			</if>
+			<if test ="stage != null">
+				stage = #{stage},
+			</if>
+			<if test ="status != null">
+				status = #{status},
+			</if>
+			<if test ="stuNo != null">
+				stu_no = #{stuNo},
+			</if>
+			<if test ="updateId != null">
+				update_id = #{updateId},
+			</if>
+			<if test ="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+		</set>
+		where UID = #{id}
+	</update>
+</mapper>
+

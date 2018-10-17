@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vs.business.bean.LabelInfo">
+
+  <resultMap id="labelInfoResult" type="com.vs.business.bean.LabelInfo">
+    <result property="cataCode" column="CATA_CODE"/><!-- String -->
+    <result property="categoryId" column="CategoryID"/><!-- int -->
+    <!--<result property="createId" column="CreatedBy"/>&lt;!&ndash; int &ndash;&gt;-->
+    <!--<result property="createTime" column="CreateTime"/>&lt;!&ndash; String &ndash;&gt;-->
+    <result property="disName" column="DisName"/><!-- String -->
+    <result property="enName" column="EnName"/><!-- String -->
+    <result property="isActive" column="IsActive"/><!-- int -->
+    <result property="isQuestionScore" column="IsQuestionScore"/><!-- int -->
+    <result property="level" column="LEVEL"/><!-- int -->
+    <result property="name" column="Name"/><!-- String -->
+    <result property="orderIndex" column="OrderIndex"/><!-- int -->
+    <result property="parentLabelId" column="ParentLabelID"/><!-- int -->
+    <result property="projectCode" column="projectCode"/><!-- String -->
+    <!--<result property="updateId" column="ModifiedBy"/>&lt;!&ndash; int &ndash;&gt;-->
+    <!--<result property="updateTime" column="ModifyTime"/>&lt;!&ndash; String &ndash;&gt;-->
+    <result property="uuid" column="Label_ID"/><!-- int -->
+  </resultMap>
+
+  <select id="selectByMap" resultMap="labelInfoResult">
+    select * from labelinfo
+    <where>
+      <if test="cataCode != null">
+          CATA_CODE = #{cataCode}
+      </if>
+      <if test="categoryId != null">
+          CategoryID = #{categoryId}
+      </if>
+      <if test="categoryIds != null">
+          CategoryID in
+          <foreach item="item" collection="categoryIds" separator="," open="(" close=")">
+            #{item}
+          </foreach>
+      </if>
+      <if test="disName != null">
+          DisName = #{disName}
+      </if>
+      <if test="enName != null">
+          EnName = #{enName}
+      </if>
+      <if test="enName != null">
+          IsActive = #{isActive}
+      </if>
+      <if test="isQuestionScore != null">
+          IsQuestionScore = #{isQuestionScore}
+      </if>
+      <if test="level != null">
+          LEVEL = #{level}
+      </if>
+      <if test="name != null">
+          Name = #{name}
+      </if>
+      <if test="orderIndex != null">
+          OrderIndex = #{orderIndex}
+      </if>
+      <if test="parentLabelId != null">
+          ParentLabelID = #{parentLabelId}
+      </if>
+      <if test="projectCode != null">
+          projectCode = #{projectCode}
+      </if>
+      <if test="uuid != null">
+          Label_ID = #{uuid}
+      </if>
+    </where>
+    <if test="orderBy != null">
+      order by #{orderBy}
+    </if>
+    <if test="limit != null">
+      limit #{start},#{end}
+    </if>
+  </select>
+
+  <select id="selectSpeakTopics" resultType="java.util.HashMap">
+      select Label_ID as uuid ,Name as name ,EnName as enName,CategoryID as categoryId,GROUP_CONCAT(ParentLabelID SEPARATOR '_') as questionType ,GROUP_CONCAT(Label_ID SEPARATOR '_') as labelIds from labelinfo
+      <where>
+        <if test="cataCode != null">
+          CATA_CODE = #{cataCode}
+        </if>
+        <if test="categoryId != null">
+          CategoryID = #{categoryId}
+        </if>
+        <if test="disName != null">
+          DisName = #{disName}
+        </if>
+        <if test="enName != null">
+          EnName = #{enName}
+        </if>
+        <if test="isActive != null">
+          IsActive = #{isActive}
+        </if>
+        <if test="isQuestionScore != null">
+          IsQuestionScore = #{isQuestionScore}
+        </if>
+        <if test="level != null">
+          LEVEL = #{level}
+        </if>
+        <if test="name != null">
+          Name = #{name}
+        </if>
+        <if test="orderIndex != null">
+          OrderIndex = #{orderIndex}
+        </if>
+        <if test="parentLabelId != null">
+          ParentLabelID in
+          <foreach item="item" collection="parentLabelId" separator="," open="(" close=")">
+            #{item}
+          </foreach>
+        </if>
+        <if test="projectCode != null">
+          projectCode = #{projectCode}
+        </if>
+        <if test="uuid != null">
+          Label_ID = #{uuid}
+        </if>
+      </where>
+      group by Name
+    <if test="orderBy != null">
+      order by #{orderBy} #{order}
+    </if>
+    <if test="AA != limit">
+      limit #{start},#{end}
+    </if>
+  </select>
+
+</mapper>

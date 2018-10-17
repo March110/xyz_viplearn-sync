@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.vs.business.bean.Question">
+
+    <!-- qids -->
+    <select id="pkSelectByMap" resultType="int">
+        SELECT
+        Q_ID
+        FROM
+        questions
+        WHERE
+        IsDelete = 0 and projectCode = '0101'
+    </select>
+    <!-- Tpo info -->
+    <select id="selectTpoInfo" resultType="java.util.HashMap">
+        SELECT
+        lc.LC_ID tpoId,
+        lc.`Name` tpoName,
+        p.P_ID pId
+        FROM
+        labelcategory lc left join papersinfo p on lc.LC_ID = p.SubordinateQId
+        WHERE
+        lc.TypeCode = 'ST'
+        AND lc.Type2Code = 'SSTT' order by lc.LC_ID
+    </select>
+
+    <select id="selectQuestionCodeNameByPid" resultType="java.util.HashMap">
+        SELECT
+        ps.QID qId,
+        psd.codeName,
+        psd.childType
+        FROM
+        PaperSection ps
+        LEFT JOIN PaperSectionDetail psd ON ps.PC_ID = psd.id
+        WHERE
+        ps.P_ID = #{pId}
+        <if test="childType != null and childType !=''">and psd.childType = #{childType}</if>
+        ORDER BY
+        psd.childType,
+        psd.`order`
+    </select>
+
+
+    <select id="selectQuestionIntensiveByQid" resultType="java.util.HashMap">
+        SELECT
+        qil.id,
+        qil.cntext,
+        qil.entext,
+        qil.START,
+        qil.END,
+        qil.qId,
+        qil.sortNum
+        from question_intensive_listening qil
+        WHERE
+        isActive = '1'
+        AND qil.qId = #{qId}
+        ORDER BY
+        qil.sortNum
+    </select>
+
+    <!-- countByTopic -->
+    <select id="countByTopic" resultType="java.util.HashMap">
+        SELECT
+        SubordinateQId as subordinateQId,
+        Topic as topic,
+        topic2,
+        count(1) as count
+        FROM
+        questions
+        <where>
+            <if test="isDelete != null">
+                and IsDelete = #{isDelete}
+            </if>
+            <if test="topic != null">
+                and Topic = #{Topic}
+            </if>
+            <if test="topicIds != null">
+                and Topic in
+                <foreach item="item" collection="topicIds" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="topic2 != null">
+                and topic2 = #{topic2}
+            </if>
+            <if test="topic2Ids != null">
+                and topic2 in
+                <foreach item="item" collection="topic2Ids" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="qCategory != null">
+                and QCategory = #{qCategory}
+            </if>
+            <if test="subordinateQId != null">
+                and SubordinateQId = #{subordinateQId}
+            </if>
+            <if test="isPublish != null">
+                and IsPublish = #{isPublish}
+            </if>
+            <if test="projectCode != null">
+                and projectCode = #{projectCode}
+            </if>
+            <if test="tpoIds != null">
+                and SubordinateQId in
+                <foreach item="item" collection="tpoIds" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        <if test="groupBy != null">
+            group by #{groupBy}
+        </if>
+        <if test="limit != null">
+            limit #{start},#{end}
+        </if>
+    </select>
+    <!-- countByTopic -->
+    <select id="countByTopicArr" resultType="int">
+        SELECT
+        count(1) as count
+        FROM
+        questions
+        <where>
+            <if test="isDelete != null">
+                and IsDelete = #{isDelete}
+            </if>
+            <if test="topic != null">
+                and Topic = #{Topic}
+            </if>
+            <if test="topicIds != null">
+                and Topic in
+                <foreach item="item" collection="topicIds" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="qCategory != null">
+                and QCategory = #{qCategory}
+            </if>
+            <if test="projectCode != null">
+                and projectCode = #{projectCode}
+            </if>
+        </where>
+        <if test="groupBy != null">
+            group by #{groupBy}
+        </if>
+        <if test="limit != null">
+            limit #{start},#{end}
+        </if>
+    </select>
+
+    <select id="selectDoesNumByQIds" resultType="java.util.HashMap">
+        SELECT
+        count(DISTINCT create_user) AS doesCount
+        from exam_new_info
+        WHERE
+        q_id in
+        <foreach item="item" collection="qIds" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        and isActive = 1
+        and type = 1
+        group by q_id
+    </select>
+    <select id="selectDoesNumByQId" resultType="java.util.HashMap">
+        SELECT
+        count(DISTINCT create_user) AS doesCount
+        from exam_new_info
+        WHERE
+        q_id = #{qId}
+        and isActive = 1
+        and type = 1
+        and clientType = #{clientType}
+    </select>
+    <select id="isDone" resultType="int">
+        SELECT count(1) from exam_new_info where q_id = #{qId} and create_user = #{userId} and type = 1 and is_done =1 and clientType = #{clientType}
+    </select>
+    <select id="getQPageCount" resultType="int">
+        SELECT count(1) from questionpage where Q_ID = #{qId}
+    </select>
+    <select id="getResultCount" resultType="java.util.HashMap">
+        SELECT
+        eni.id,
+        eni.q_id,
+        count(IF(ena.is_right = 1, 1, NULL)) AS rightNum
+        FROM
+        exam_new_info eni
+        LEFT JOIN exam_new_answer ena ON eni.id = ena.exam_id
+        WHERE
+        eni.is_done = 1
+        AND eni.type = 1
+        AND eni.create_user = #{userId}
+        AND eni.q_id = #{qId}
+        AND eni.clientType = #{clientType}
+        GROUP BY eni.id
+        ORDER BY
+        eni.create_time DESC
+        LIMIT 0,1
+    </select>
+    <select id="getTotalRightNumByQid" resultType="int">
+        SELECT
+        count(1) AS totalRightNum
+        FROM
+        exam_new_answer
+        WHERE
+        q_id = #{qId} and is_right = 1 AND type = 1 and clientType = #{clientType}
+    </select>
+    <select id="getTotalPracticeTimesByQid" resultType="int">
+        SELECT
+        count(distinct exam_id)
+        FROM
+        exam_new_answer
+        WHERE
+        q_id = #{qId} and type = 1
+        and clientType = #{clientType}
+    </select>
+    <select id="getDoneNumByTpoId" resultType="int">
+        select count(*) from (
+        select eni.id as eId from questions q
+        LEFT JOIN exam_new_info eni on eni.q_id = q.q_id and eni.type = 1 and eni.is_done =1 and eni.create_user =
+        #{userId} and eni.clientType = #{clientType}
+        where
+        q.QCategory = #{qCategory} and q.SubordinateQId = #{subordinateQId} AND q.IsDelete = 0 GROUP BY q.q_id
+        ) a where a.eId is not null
+    </select>
+    <select id="getDoneNumByTopic" resultType="int">
+        select count(*) from (
+        select eni.id as eId from questions q
+        LEFT JOIN exam_new_info eni on eni.q_id = q.q_id and eni.type = 1 and eni.is_done =1 and eni.create_user =
+        #{userId} and eni.clientType = #{clientType}
+        <where>
+            <if test="isDelete != null">
+                and q.IsDelete = #{isDelete}
+            </if>
+            <if test="topic != null">
+                and q.Topic = #{topic}
+            </if>
+            <if test="topics != null">
+                and q.Topic in
+                <foreach item="item" collection="topics" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="topic2 != null">
+                and q.topic2 = #{topic2}
+            </if>
+            <if test="qCategory != null">
+                and q.QCategory = #{qCategory}
+            </if>
+        </where>
+        GROUP BY q.q_id ) a where a.eId is not null
+    </select>
+
+</mapper>
